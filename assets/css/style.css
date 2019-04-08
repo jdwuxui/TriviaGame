@@ -1,0 +1,20 @@
+body {
+    background-image: url("../images/pred-aliens-moon-overlay.jpg");
+    background-repeat: no-repeat; 
+    background-size: cover;
+    color: #ffffff; 
+    font-family: 'Share Tech Mono', monospace;
+}
+
+H4 {
+    font-family: 'Quantico', sans-serif; 
+}
+
+.alien-glow {
+    background-color: #ffffff00;
+    border-style: solid; 
+    border-color: #7cff02;
+    color: #7cff02;
+    padding: .5rem 1rem;
+
+}
