@@ -7,14 +7,23 @@ body {
 }
 
 H4 {
-    font-family: 'Quantico', sans-serif; 
+    font-family: 'Exo 2', sans-serif; 
 }
 
-.alien-glow {
+.alien-glow, #done-button {
     background-color: #ffffff00;
     border-style: solid; 
     border-color: #7cff02;
     color: #7cff02;
     padding: .5rem 1rem;
+    box-shadow: 0px 0px 5px #7cff02;
+    border-radius: 2%;
+}
 
+#hero {
+    margin-top: 3rem;
+}
+
+#questions-and-answers {
+    display: none;
 }
