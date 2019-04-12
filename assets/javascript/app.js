@@ -4,15 +4,32 @@
 var para = document.createElement("h1");
 var heading = document.createTextNode("PREDATOR TRIVIA GAME");
 para.appendChild(heading);
-var element = document.getElementById("GameDiv");
+var element = document.getElementById("Game-Title");
 element.appendChild(para);
 //THIS WORKS^^^
 
 // Display instructions
+var instructions = document.createElement("h4");
+var instructionText = document.createTextNode("Test your knowledge of the Predator species by answering as many questions as you can before time runs out.");
+instructions.appendChild(instructionText);
+var element = document.getElementById("Instructions-Text");
+element.appendChild(instructions);
+//THIS WORKS^^^
 
 // Display start button
+var startButton = document.createElement("button");
+var startButtonText = document.createTextNode("START GAME");
+startButton.appendChild(startButtonText);
+var element = document.getElementById("Start-Button");
+element.appendChild(startButton);
+//THIS WORKS^^^
+//Add a custom class to the button 
+startButton.classList.add("alien-glow");
+//THIS WORKS^^^
+
 
 // Clicking the start button runs the game 
+//Create a function for the
 
 // Start the timer countdonwn for the question
 
