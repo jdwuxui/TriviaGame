@@ -15,7 +15,7 @@ H4 {
     border-style: solid; 
     border-color: #7cff02;
     color: #7cff02;
-    padding: .5rem 1rem;
+    padding: .5rem 2rem;
     box-shadow: 0px 0px 5px #7cff02;
     border-radius: 2%;
 }
@@ -26,4 +26,17 @@ H4 {
 
 #questions-and-answers {
     display: none;
+}
+
+#Game-Title {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.hidden {
+	display:none;
+}
+
+.visible {
+	display:block;
 }

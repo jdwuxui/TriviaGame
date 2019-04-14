@@ -24,87 +24,187 @@ var element = document.getElementById("Start-Button");
 element.appendChild(startButton);
 //Add a class to button 
 startButton.classList.add("alien-glow");
-//THIS WORKS^^^
+//THIS WORKS^^^ 
 
-// GLOBAL VARIABLES
-var correctAnswers = 0;
-var WrongAnswers = 0;
-var playerGuess = [];
-var triviaQuestions = 0;
-var triviaQuestions = [{
-    question: "1. What year was the movie 'Predator' released?",
-    answers: ["1984", "1985", "1986", "1987"],
-    correctAnswer: 3
-    },
-    {
-    question: "2. In the first Predator movie, which one-liner does Arnold Schwarzenegger say after impaling an enemy against a wooden post with his machete?",
-    answers: ["Stay put", "Stick around", "Snap into a slim jim", "Stick to it"],
-    correctAnswer: 1
-    },
-    {
-    question: "3. Which martial-arts expert was originally cast to play the Predator?",
-    answers: ["Jackie Chan", "Jean-Claude Van Damme ", "Wesley Snipes", "Steven Seagal"],
-    correctAnswer: 1
-    },
-    {
-    question: "4. What animal did Mac kill with his knife?",
-    answers: ["Scorpion", "Wild Boar", "A Scorpion and Wild Boar", "Monkey"],
-    correctAnswer: 1
-    }, 
-    {
-    question: "5. What ingredients were used to make the predator's blood?",
-    answers: ["Glow sticks and KY Jelly", "Mountain Dew and rubber cement", "Melted crayons", "Food dye and Vasoline"],
-    correctAnswer: 0
+// Click handler for Start button
+$("#Start-Button").on("click", function() {
+    $("#Start-Button").hide();
+    $("#Instructions-Text").hide(); 
+  });
+
+// Questions, answers, and correct answer
+(function() {
+    var questions = [{
+      question: "1. What year was the movie 'Predator' released?",
+      choices: ["1984", "1985", "1986", "1987"],
+      correctAnswer: 1
+    }, {
+      question: "2. In the first Predator movie, which one-liner does Arnold Schwarzenegger say after impaling an enemy against a wooden post with his machete?",
+      choices: ["Stay put", "Stick around", "Snap into a slim jim", "Stick to it"],
+      correctAnswer: 4
+    }, {
+      question: "3. Which martial-arts expert was originally cast to play the Predator?",
+      choices: ["Jackie Chan", "Jean-Claude Van Damme ", "Wesley Snipes", "Steven Seagal"],
+      correctAnswer: 1
+    }, {
+      question: "4. What animal did Mac kill with his knife?",
+      choices: ["Scorpion", "Wild Boar", "A Scorpion and Wild Boar", "Monkey"],
+      correctAnswer: 1
+    }, {
+      question: "5. What ingredients were used to make the predator's blood?",
+      choices: ["Glow sticks and KY Jelly", "Mountain Dew and rubber cement", "Melted crayons", "Food dye and Vasoline"],
+      correctAnswer: 0
     }
-    ];
+];
 
-// The player clicks the start button to run the game and timer.
-document.getElementById("Start-Button").addEventListener("click", startTheGame);
+// TIMER
+//  Counter = 10.
+var timer = 10;
+var intervalId;
+//  When the start button gets clicked, execute the run function.
+$("#resume").on("click", run);
 
-// Create event listener for Start Button and name its function
+//  When thw next button is clicked run stop function
+$("#next").on("click", stop);
 
-// The start button and instructions should be hidden
+function run() {
+  clearInterval(intervalId);
+  intervalId = setInterval(decrement, 1000);
+}
+function decrement() {
+  timer--;
+  //  Show the timer number .
+  $("#question-timer").html("<h2>" + timer + "</h2>");
 
-// Show only one question until the player answers it or their time runs out.
+  if (timer === 0) {
+    stop();
+
+    //  Alert the user that time is up.
+    alert("The correct answer was " + correctAnswer);
+  }
+  console.log(timer);
+}
+
+
+//  The stop function
+function stop() {
+  clearInterval(intervalId);
+}
+
+//  Execute the run function.
+run();
+
+//END TIMER
+    //Tracks question number
+    var questionCounter = 0; 
+    //Array of user guesses
+    var selections = []; 
+    //Quiz div object
+    var quiz = $('#quiz'); 
     
-
-//start the timer countdonwn after the start button is clicked 
-        ///...and when the player an answer is clicked.
-        var countdown = 10;
+    // Display initial question    
+    // Click handler for the 'next' button
+    $('#next').on('click', function (e) {
+      e.preventDefault();
+      choose();
       
-        var timer = setInterval(function() {
-          console.log(countdown);
-          countdown--;
-          if(countdown === 0) {
-            stopInterval()
-          }
-        }, 1000);
+      // If timer runs out stop counter.
+      /// ...then display coorect answer selection, progress is stopped
+      if (isNaN(selections[questionCounter])) {
+        alert('Please make a selection!');
+      } else {
+        questionCounter++;
+        displayNext();
+      }
+    });
+    
+    // Click handler for the 'Start Over' button
+    $('#start').on('click', function (e) {
+      e.preventDefault();
+      
+      if(quiz.is(':animated')) {
+        return false;
+      }
+      questionCounter = 0;
+      selections = [];
+      displayNext();
+      $('#start').hide();
+    });    
+    
+    // Creates and returns the div that contains the questions and 
+    // the answer selections
+    function createQuestionElement(index) {
+      var qElement = $('<div>', {
+        id: 'question'
+      });
+      
+      var header = $('<h2>Question ' + (index + 1) + ':</h2>');
+      qElement.append(header);
+      
+      var question = $('<p>').append(questions[index].question);
+      qElement.append(question);
+      
+      var radioButtons = createRadios(index);
+      qElement.append(radioButtons);
+      
+      return qElement;
+    }
+    
+    // List of answer choice radios
+    function createRadios(index) {
+      var radioList = $('<ul>');
+      var item;
+      var input = '';
+      for (var i = 0; i < questions[index].choices.length; i++) {
+        item = $('<li>');
+        input = '<input type="radio" name="answer" value=' + i + ' />';
+        input += questions[index].choices[i];
+        item.append(input);
+        radioList.append(item);
+      }
+      return radioList;
+    }
+    
+    // Reads the user selection and pushes the value to an array
+    function choose() {
+      selections[questionCounter] = +$('input[name="answer"]:checked').val();
+    }
+    
+    // Display next requested element
+    function displayNext() {
+      quiz.fadeOut(function() {
+        $('#question').remove();
         
-        var stopInterval = function() {
-          console.log("You're too slow!");
-          clearInterval(timer);
+        if(questionCounter < questions.length){
+          var nextQuestion = createQuestionElement(questionCounter);
+          quiz.append(nextQuestion).fadeIn();
+          if (!(isNaN(selections[questionCounter]))) {
+            $('input[value='+selections[questionCounter]+']').prop('checked', true);
+          }
+          
+          // Controls display of 'prev' button         
+        }else {
+          var scoreElem = displayScore();
+          quiz.append(scoreElem).fadeIn();
+          $('#next').hide();
+          $('#start').show();
         }
-// Display timer
- ///...then start the timer
-
- // Display the first question
-                            
-// Show answer choices
-
-// Only allow 1 answer to be selected 
-
-// Notify the player if they got the answer right or wrong
-    ///...and show a gif or image associated with it
-
-// If the timer runs out the correct answer is displayed with an gif or image
-    ///...then the time is reset
-        ////...and the next question is dislayed
-
-///...and +1 will be added to Unanswered Questions score 
-// If answer is skipped +1 will be added to Unanswered Questions score 
-// If answer is wrong +1 will be added to Unanswered Questions score 
-// If the answer is correct +1 will be added to Correct Answers score
-
-// Store the selected answer/index value
-
-// Show a new question
+      });
+    }
+    
+    // Calculate score and returns a paragraph element to be displayed
+    function displayScore() {
+      var score = $('<p>',{id: 'question'});
+      
+      var numCorrect = 0;
+      for (var i = 0; i < selections.length; i++) {
+        if (selections[i] === questions[i].correctAnswer) {
+          numCorrect++;
+        }
+      }
+      
+      score.append('You got ' + numCorrect + ' of ' +
+                   questions.length + ' correct');
+      return score;
+    }
+  })();
